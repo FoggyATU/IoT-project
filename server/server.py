@@ -23,6 +23,7 @@ class AwesomeHttp(BaseHTTPRequestHandler):
             completedProcess:subprocess.CompletedProcess = subprocess.run(["yt-dlp","-x","--audio-format","mp3","--get-url",f"{theurl}"],capture_output=True)
             result = completedProcess.stdout
 
+
         #Return the output
         if result == "None":
             self.wfile.write(bytearray(result,"UTF-8"))
@@ -41,7 +42,7 @@ def get_query_dict(thequery):
 
     for q in split_query:
         s = q.split("=")
-        if len(s) == 2:
+        if len(s) >= 2:
             secondPart:str = s[1]
             if secondPart == "":
                 secondPart = "None"
