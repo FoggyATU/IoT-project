@@ -53,7 +53,7 @@ void loop() {
     Serial.println(myBPM); 
     
     updateScreen(myBPM, previousPulse);
-    tone(buzzer_PIN,currentVolume,500);
+    tone(buzzer_PIN,currentVolume,100);
 
     Serial.println("Current Volume:");
     Serial.println(currentVolume);
@@ -66,7 +66,7 @@ void loop() {
     handleVolume();
   }
 
-  delay(20);
+  delay(100);
 }
 
 void handleVolume(){
