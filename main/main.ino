@@ -1,62 +1,101 @@
 #include <Arduino.h>
-#include <U8g2lib.h>
-#include <PulseSensorPlayground.h>  // Includes the PulseSensorPlayground Library.
+#include <U8g2lib.h> //Display library
+#include <PulseSensorPlayground.h> //Pulse sensor library
+#include <Wire.h> //i2c library
 
-//This code just checks whether we are using SPI or I2C, we can remove most of this and just include "Wire.h" because we will only use I2C
-#ifdef U8X8_HAVE_HW_SPI
-#include <SPI.h>
-#endif
-#ifdef U8X8_HAVE_HW_I2C
-#include <Wire.h>
-#endif
+U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE); //Setup u8g2
 
+const int pulse_PIN = A0;     // PulseSensor SIGNAL WIRE connected to ANALOG PIN 0
+const int buzzer_PIN = A1;    // Buzzer connected to ANALOG PIN 1
+const int volumeDown_PIN = 2; // Button connected to DIGITAL PIN 2
+const int volumeUp_PIN = 3;   // Button connected to DIGITAL PIN 3
 
-//  Variables
-U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE);
-const int PulseWire = A0;      // PulseSensor PURPLE WIRE connected to ANALOG PIN 0
-int Threshold = 550;          // Determine which Signal to "count as a beat" and which to ignore.
-                              // Use the "Gettting Started Project" to fine-tune Threshold Value beyond default setting.
-                              // Otherwise leave the default "550" value.
+const int threshold = 550;    // Determine which Signal to "count as a beat" and which to ignore
+const int maxVol = 600;
+const int minVol = 100;
 
-PulseSensorPlayground pulseSensor;  // Creates an instance of the PulseSensorPlayground object called "pulseSensor"
-int buzzerPIN = A1;
+int previousPulse = 0;       
+int currentVolume = 100;    
+
+PulseSensorPlayground pulseSensor;
+
+//im tired of writing comments
 
 void setup() {
-
   Serial.begin(9600);
 
+  pulseSensor.analogInput(pulse_PIN);
+  pulseSensor.setThreshold(threshold);
 
-  pulseSensor.analogInput(PulseWire);
-  pulseSensor.setThreshold(Threshold);
-  //pulseSensor.blinkOnPulse(A1);
-
-  // Double-check the "pulseSensor" object was created and "began" seeing a signal.
-  if (pulseSensor.begin()) {
-    Serial.println("We created a pulseSensor Object !");  // This prints one time at Arduino power-up,  or on Arduino reset.
-  }
+  pinMode(volumeDown_PIN,INPUT_PULLUP);
+  pinMode(volumeUp_PIN,INPUT_PULLUP);
 
   u8g2.begin();
-  //Oled.setFont(u8x8_font_amstrad_cpc_extended_r);
 }
-
 
 void loop() {
 
-  if (pulseSensor.sawStartOfBeat()) {              // Constantly test to see if "a beat happened".
-    u8g2.clearBuffer();	
-    u8g2.setFont(u8g2_font_t0_22b_tf);
-    int myBPM = pulseSensor.getBeatsPerMinute();   // Calls function on our pulseSensor object that returns BPM as an "int".
-                                                   // "myBPM" hold this BPM value now.
-    Serial.println("♥  A HeartBeat Happened ! ");  // If test is "true", print a message "a heartbeat happened".
-    Serial.print("BPM: ");                         // Print phrase "BPM: "
-    Serial.println(myBPM);   
-    //Oled.print(myBPM);                      // Print the value inside of myBPM.
-    char cstr[16];
-    tone(buzzerPIN,330,500);
-    itoa(myBPM, cstr, 10);
-    u8g2.drawStr(40,40,cstr);
-    u8g2.sendBuffer();
+  if (pulseSensor.sawStartOfBeat()) {              
+    int myBPM = pulseSensor.getBeatsPerMinute();
+                                                   
+    Serial.println("A HeartBeat Happened!");
+    Serial.println(myBPM); 
+    
+    updateScreen(myBPM, previousPulse);
+    tone(buzzerPIN,currentVolume,500);
+
+    previousPulse = myBPM
   }
 
-  //delay(20);  // considered best practice in a simple sketch.
+  handleVolume();
+
+  delay(20);
 }
+
+void handleVolume(){
+  int volumeDown = digitalRead(volumeDown_PIN);
+  int volumeUp = digitalRead(volumeUp_PIN);
+
+  if (volumeDown == 0 && currentVolume > minVol){
+    currentVolume -= 100;
+  }
+
+  if (volumeUp == 0 && currentVolume < maxVol){
+    currentVolume += 100;
+  }
+}
+
+void updateScreen(int currentBpm, int previousBpm){
+  //Screen designed using lopaka.app
+  u8g2.clearBuffer();	
+
+  u8g2.setFontMode(1);
+  u8g2.setBitmapMode(1);
+  u8g2.drawRFrame(0, 0, 127, 64, 10);
+
+  u8g2.setFont(u8g2_font_t0_15b_tr);
+  u8g2.drawStr(52, 17, "BPM:");
+
+  u8g2.setFont(u8g2_font_timR24_tr);
+  u8g2.drawStr(40, 45, String(currentBpm));
+
+  u8g2.drawBox(53, 50, 27, 10);
+
+  u8g2.setDrawColor(2);
+  u8g2.setFont(u8g2_font_6x10_tr);
+
+  int change = currentBpm-previousBpm;
+  String convertedString = String(change);
+  if (change > 0){
+    convertedString = "+"+convertedString
+  }
+  u8g2.drawStr(56, 59, convertedString);
+
+  u8g2.sendBuffer();
+}
+
+
+
+
+
+
