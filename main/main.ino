@@ -1,7 +1,13 @@
 #include <Arduino.h>
-#include <U8g2lib.h> //Display library
-#include <PulseSensorPlayground.h> //Pulse sensor library
-#include <Wire.h> //i2c library
+#include <U8g2lib.h>
+
+#ifdef U8X8_HAVE_HW_SPI
+#include <SPI.h>
+#endif
+#ifdef U8X8_HAVE_HW_I2C
+#include <Wire.h>
+#endif
+#include <PulseSensorPlayground.h>
 
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE); //Setup u8g2
 
@@ -10,12 +16,13 @@ const int buzzer_PIN = A1;    // Buzzer connected to ANALOG PIN 1
 const int volumeDown_PIN = 2; // Button connected to DIGITAL PIN 2
 const int volumeUp_PIN = 3;   // Button connected to DIGITAL PIN 3
 
-const int threshold = 550;    // Determine which Signal to "count as a beat" and which to ignore
+int threshold = 550;    // Determine which Signal to "count as a beat" and which to ignore
 const int maxVol = 600;
 const int minVol = 100;
 
 int previousPulse = 0;       
 int currentVolume = 100;    
+int savedTime = 0;
 
 PulseSensorPlayground pulseSensor;
 
@@ -26,9 +33,13 @@ void setup() {
 
   pulseSensor.analogInput(pulse_PIN);
   pulseSensor.setThreshold(threshold);
+  //pulseSensor.blinkOnPulse(buzzer_PIN);
+  pulseSensor.begin();
 
   pinMode(volumeDown_PIN,INPUT_PULLUP);
   pinMode(volumeUp_PIN,INPUT_PULLUP);
+
+  savedTime = millis();
 
   u8g2.begin();
 }
@@ -42,17 +53,25 @@ void loop() {
     Serial.println(myBPM); 
     
     updateScreen(myBPM, previousPulse);
-    tone(buzzerPIN,currentVolume,500);
+    tone(buzzer_PIN,currentVolume,500);
 
-    previousPulse = myBPM
+    Serial.println("Current Volume:");
+    Serial.println(currentVolume);
+
+    previousPulse = myBPM;
   }
 
-  handleVolume();
+
+  if (millis() - savedTime >= 1000){
+    handleVolume();
+  }
 
   delay(20);
 }
 
 void handleVolume(){
+  savedTime = millis();
+  
   int volumeDown = digitalRead(volumeDown_PIN);
   int volumeUp = digitalRead(volumeUp_PIN);
 
@@ -77,7 +96,11 @@ void updateScreen(int currentBpm, int previousBpm){
   u8g2.drawStr(52, 17, "BPM:");
 
   u8g2.setFont(u8g2_font_timR24_tr);
-  u8g2.drawStr(40, 45, String(currentBpm));
+
+  //converts the change string into a char array
+  String stringPulse = String(currentBpm);
+  const char* arrayPulse = stringPulse.c_str();
+  u8g2.drawStr(40, 45, arrayPulse);
 
   u8g2.drawBox(53, 50, 27, 10);
 
@@ -87,9 +110,12 @@ void updateScreen(int currentBpm, int previousBpm){
   int change = currentBpm-previousBpm;
   String convertedString = String(change);
   if (change > 0){
-    convertedString = "+"+convertedString
+    convertedString = "+"+convertedString;
   }
-  u8g2.drawStr(56, 59, convertedString);
+
+  //converts the change string into a char array  
+  const char* arrayString = convertedString.c_str();
+  u8g2.drawStr(56, 59, arrayString);
 
   u8g2.sendBuffer();
 }
