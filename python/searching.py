@@ -12,3 +12,6 @@ with open(apikeyPath, "r") as file:
     apikey = file.read()
 
 print(apikey)
+
+r = requests.get(f'https://api.getsong.co/tempo/?api_key={apikey}&bpm=67&limit=5')
+print(r.text)
