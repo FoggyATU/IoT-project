@@ -15,4 +15,13 @@ with open(apikeyPath, "r") as file:
 r = requests.get(f'https://api.getsong.co/tempo/?api_key={apikey}&bpm=67&limit=5')
 
 data = json.loads(r.text)
-print(json.dumps(data, indent=4))
+#print(json.dumps(data, indent=4))
+
+
+print("\n\n\n=== songs ===")
+
+for song in data["tempo"]:
+    print(song["song_title"] + " - " + song["artist"]["name"])
+
+
+print("\n\n")
