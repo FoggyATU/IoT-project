@@ -1,5 +1,6 @@
 import requests
 import os
+import json
 
 #make sure that the working directory is the same as the file, helps prevent errors
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -11,7 +12,7 @@ apikeyPath = r"apikey.txt"
 with open(apikeyPath, "r") as file:
     apikey = file.read()
 
-print(apikey)
-
 r = requests.get(f'https://api.getsong.co/tempo/?api_key={apikey}&bpm=67&limit=5')
-print(r.text)
+
+data = json.loads(r.text)
+print(json.dumps(data, indent=4))
