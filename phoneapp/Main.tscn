@@ -21,6 +21,15 @@ metadata/_custom_type_script = "uid://b3jqxkvfv8ogd"
 
 [node name="Player" type="AudioStreamPlayer" parent="."]
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.21389, 0.148518, 0.365582, 1)
+
 [node name="InfoLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -28,10 +37,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -43.0
-offset_top = -11.5
-offset_right = 43.0
-offset_bottom = 11.5
+offset_left = -150.0
+offset_top = -38.5
+offset_right = 150.0
+offset_bottom = 38.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "LOADING..."

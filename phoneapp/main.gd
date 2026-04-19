@@ -6,6 +6,10 @@ const URL:String = "https://cool.foggydude.dev/?url={0}"
 @onready var player:AudioStreamPlayer = $Player
 @onready var info_label:Label = $InfoLabel
 
+#TODO LIST:
+#Do a request every like 2secs to the Arduino to see what song to play
+#Get name of the song played (maybe get it from the arduino)
+#Cool awesome interface
 
 func _ready():
 	info_label.text = "Loading..."
