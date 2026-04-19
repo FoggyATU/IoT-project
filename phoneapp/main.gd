@@ -2,8 +2,8 @@ extends Control
 
 const URL:String = "https://cool.foggydude.dev/?url={0}"
 
-@onready var http:AwaitableHTTPRequest = $Req
-@onready var player:AudioStreamPlayer = $AudioStreamPlayer
+@onready var http:AwaitableHTTPRequest = $Http
+@onready var player:AudioStreamPlayer = $Player
 @onready var info_label:Label = $InfoLabel
 
 
@@ -15,9 +15,12 @@ func _ready():
 func download_audio(video_url:String):
 	var resp := await http.async_request(URL.format([video_url]))
 	if !resp.success() or resp.status_err():
-			push_error("Request failed.")
-			
+		push_error("Request failed.")
+
+	load_audio(resp.bytes)
+
+func load_audio(bytes:PackedByteArray):
 	var audio := AudioStreamMP3.new()
-	audio.data = resp.bytes
+	audio.data = bytes
 	player.stream = audio
 	player.play()

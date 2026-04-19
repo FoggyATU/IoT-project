@@ -1,25 +1,25 @@
 [gd_scene load_steps=4 format=3 uid="uid://cp0lqlt3i661h"]
 
-[ext_resource type="Script" uid="uid://b8e2w1es7uqqr" path="res://control.gd" id="1_62e2m"]
-[ext_resource type="Script" uid="uid://b3jqxkvfv8ogd" path="res://addons/awaitable_http_request/awaitable_http_request.gd" id="2_62e2m"]
+[ext_resource type="Script" uid="uid://b8e2w1es7uqqr" path="res://main.gd" id="1_uu6xs"]
+[ext_resource type="Script" uid="uid://b3jqxkvfv8ogd" path="res://addons/awaitable_http_request/awaitable_http_request.gd" id="2_r0du0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_62e2m"]
 font_size = 56
 
-[node name="Control" type="Control"]
+[node name="Main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_62e2m")
+script = ExtResource("1_uu6xs")
 
-[node name="Req" type="HTTPRequest" parent="."]
-script = ExtResource("2_62e2m")
+[node name="Http" type="HTTPRequest" parent="."]
+script = ExtResource("2_r0du0")
 metadata/_custom_type_script = "uid://b3jqxkvfv8ogd"
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="Player" type="AudioStreamPlayer" parent="."]
 
 [node name="InfoLabel" type="Label" parent="."]
 layout_mode = 1
