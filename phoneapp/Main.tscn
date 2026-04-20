@@ -1,12 +1,13 @@
-[gd_scene load_steps=4 format=3 uid="uid://cp0lqlt3i661h"]
+[gd_scene format=3 uid="uid://cp0lqlt3i661h"]
 
 [ext_resource type="Script" uid="uid://b8e2w1es7uqqr" path="res://main.gd" id="1_uu6xs"]
 [ext_resource type="Script" uid="uid://b3jqxkvfv8ogd" path="res://addons/awaitable_http_request/awaitable_http_request.gd" id="2_r0du0"]
+[ext_resource type="Texture2D" uid="uid://brc1kx5y4n6jp" path="res://assets/logo.png" id="3_r0du0"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_62e2m"]
 font_size = 56
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=263063301]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,13 +16,23 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_uu6xs")
 
-[node name="Http" type="HTTPRequest" parent="."]
+[node name="Downloader" type="HTTPRequest" parent="." unique_id=1115636319]
 script = ExtResource("2_r0du0")
 metadata/_custom_type_script = "uid://b3jqxkvfv8ogd"
 
-[node name="Player" type="AudioStreamPlayer" parent="."]
+[node name="Refresher" type="HTTPRequest" parent="." unique_id=1022994066]
+timeout = 1.0
+script = ExtResource("2_r0du0")
+metadata/_custom_type_script = "uid://b3jqxkvfv8ogd"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="RefreshTimer" type="Timer" parent="." unique_id=24044245]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="Player" type="AudioStreamPlayer" parent="." unique_id=1328354357]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2029226684]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,7 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.21389, 0.148518, 0.365582, 1)
 
-[node name="InfoLabel" type="Label" parent="."]
+[node name="InfoLabel" type="Label" parent="." unique_id=825614817]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -45,3 +56,18 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "LOADING..."
 label_settings = SubResource("LabelSettings_62e2m")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1730962331]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -143.77496
+offset_top = 3.0
+offset_right = 143.77496
+offset_bottom = 216.0
+grow_horizontal = 2
+texture = ExtResource("3_r0du0")
+expand_mode = 1
+
+[connection signal="timeout" from="RefreshTimer" to="." method="get_audio_data"]
