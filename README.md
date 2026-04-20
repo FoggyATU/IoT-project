@@ -1,5 +1,7 @@
 # IoT-project
 
+<img src="logo.png" alt="Project Logo" width="300" height="300">
+
 ## Description:
 A github repo for our IoT project which is a heartrate controlled music player.
 
