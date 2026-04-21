@@ -11,9 +11,14 @@ class AwesomeHttp(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/plain")
 
+        data:str = "House Tour by Sabrina Carpenter¬KWoTyfPsqbE"
+        data_to_bytes:bytes = bytearray(data,"UTF-8")
+
+        self.send_header("Content-Length", len(data_to_bytes))
+
         self.end_headers()
 
-        self.wfile.write(bytearray("One by Metallica,WM8bTdBs-cw","UTF-8"))
+        self.wfile.write(data_to_bytes)
 
     def do_POST(self):
         self.do_GET()
