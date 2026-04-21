@@ -8,6 +8,8 @@ const DOWNLOAD_URL:String = "https://cool.foggydude.dev/?url={0}"
 @onready var info_label:Label = $InfoLabel
 @onready var refresh_timer: Timer = $RefreshTimer
 
+var currently_playing:String = ""
+
 #TODO LIST:
 #Do a request every like 2secs to the Arduino to see what song to play
 #Get name of the song played (maybe get it from the arduino)
@@ -15,19 +17,26 @@ const DOWNLOAD_URL:String = "https://cool.foggydude.dev/?url={0}"
 
 func _ready():
 	pass
-	#info_label.text = "Loading..."
 	#await download_audio("ranweBZaoTQ")
 	#info_label.text = "Playing! i dont know the name though"
 
 func get_audio_data():
-	print("trying to get data")
 	var resp := await download.async_request(REFRESH_URL)
 	if !resp.success() or resp.status_err():
 		push_error("Request failed.")
 	
-	print("Success")
 	var output = resp.body_as_string()
-	print(resp.bytes)
+	var split = output.split('¬')
+	var song_name = split[0]
+	var song_id = split[1]
+	
+	if song_name != currently_playing:
+		currently_playing = song_name
+		info_label.text = "LOADING..."
+		
+		await download_audio(song_id)
+		
+		info_label.text = "Currently playing:\n%s"%[currently_playing]
 	refresh_timer.start()
 
 func download_audio(video_url:String):
