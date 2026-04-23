@@ -223,14 +223,17 @@ void loop() {
             // and a content-type so the client knows what's coming, then a blank line:
             client.println("HTTP/1.1 200 OK");
             client.println("Content-type:text/plain");
+
+            //TODO: GET THE ACCURATE LENGTH SO IT WORKS IN GODOT
+            client.println("Content-length:10");
             client.println();
 
             // the content of the HTTP response follows the header:
             client.print(song_title + " by " + artist_name + "," + videoId);
             //client.print("Espresso by Sabrina Carpenter,51zjlMhdSTE");
-
-            // The HTTP response ends with another blank line:
+            
             client.println();
+            // The HTTP response ends with another blank line:
             break;
             // break out of the while loop:
           } else {  // if you got a newline, then clear currentLine:
