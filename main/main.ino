@@ -8,17 +8,10 @@
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE); //Setup u8g2
 
 const int pulse_PIN = A0;     // PulseSensor SIGNAL WIRE connected to ANALOG PIN 0
-const int buzzer_PIN = A1;    // Buzzer connected to ANALOG PIN 1
-const int volumeDown_PIN = 2; // Button connected to DIGITAL PIN 2
-const int volumeUp_PIN = 3;   // Button connected to DIGITAL PIN 3
 
 int threshold = 550;    // Determine which Signal to "count as a beat" and which to ignore
-const int maxVol = 600;
-const int minVol = 100;
 
-int previousPulse = 0;       
-int currentVolume = 100;    
-int savedTime = 0;
+int previousPulse = 0;        
 
 PulseSensorPlayground pulseSensor;
 
@@ -32,11 +25,6 @@ void setup() {
   //pulseSensor.blinkOnPulse(buzzer_PIN);
   pulseSensor.begin();
 
-  pinMode(volumeDown_PIN,INPUT_PULLUP);
-  pinMode(volumeUp_PIN,INPUT_PULLUP);
-
-  savedTime = millis();
-
   u8g2.begin();
 }
 
@@ -49,8 +37,7 @@ void loop() {
     Serial.println(myBPM); 
     
     updateScreen(myBPM, previousPulse);
-    tone(buzzer_PIN,currentVolume,100);
-
+    
     Serial.println("Current Volume:");
     Serial.println(currentVolume);
 
@@ -58,26 +45,7 @@ void loop() {
   }
 
 
-  if (millis() - savedTime >= 1000){
-    handleVolume();
-  }
-
   delay(100);
-}
-
-void handleVolume(){
-  savedTime = millis();
-  
-  int volumeDown = digitalRead(volumeDown_PIN);
-  int volumeUp = digitalRead(volumeUp_PIN);
-
-  if (volumeDown == 0 && currentVolume > minVol){
-    currentVolume -= 100;
-  }
-
-  if (volumeUp == 0 && currentVolume < maxVol){
-    currentVolume += 100;
-  }
 }
 
 void updateScreen(int currentBpm, int previousBpm){
