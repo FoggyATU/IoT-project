@@ -27,8 +27,6 @@ metadata/_custom_type_script = "uid://b3jqxkvfv8ogd"
 
 [node name="RefreshTimer" type="Timer" parent="." unique_id=24044245]
 wait_time = 2.0
-one_shot = true
-autostart = true
 
 [node name="Player" type="AudioStreamPlayer" parent="." unique_id=1328354357]
 
@@ -71,4 +69,35 @@ grow_horizontal = 2
 texture = ExtResource("3_r0du0")
 expand_mode = 1
 
+[node name="ArudinoAddress" type="LineEdit" parent="." unique_id=1761450708]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -310.0
+offset_top = -157.0
+offset_right = 310.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+placeholder_text = "Address of  the arduino server"
+
+[node name="StartButton" type="Button" parent="." unique_id=385820314]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -58.5
+offset_top = -72.0
+offset_right = 58.5
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "START"
+
 [connection signal="timeout" from="RefreshTimer" to="." method="get_audio_data"]
+[connection signal="pressed" from="StartButton" to="." method="start"]

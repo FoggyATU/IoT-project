@@ -1,6 +1,6 @@
 extends Control
 
-const REFRESH_URL:String = "http://127.0.0.1:6768"
+var REFRESH_URL:String = "http://127.0.0.1:6768"
 const DOWNLOAD_URL:String = "https://cool.foggydude.dev/?url={0}"
 
 @onready var download:AwaitableHTTPRequest = $Downloader
@@ -15,10 +15,9 @@ var currently_playing:String = ""
 #Get name of the song played (maybe get it from the arduino)
 #Cool awesome interface
 
-func _ready():
-	pass
-	#await download_audio("ranweBZaoTQ")
-	#info_label.text = "Playing! i dont know the name though"
+func start():
+	REFRESH_URL = $ArudinoAddress.text.strip_edges()
+	get_audio_data()
 
 func get_audio_data():
 	var resp := await download.async_request(REFRESH_URL)
