@@ -24,9 +24,10 @@ func get_audio_data():
 	var resp := await download.async_request(REFRESH_URL)
 	if !resp.success() or resp.status_err():
 		push_error("Request failed.")
+		return
 	
 	var output = resp.body_as_string()
-	var split = output.split('¬')
+	var split = output.split(',')
 	var song_name = split[0]
 	var song_id = split[1]
 	
@@ -44,6 +45,7 @@ func download_audio(video_url:String):
 	var resp := await download.async_request(DOWNLOAD_URL.format([video_url]))
 	if !resp.success() or resp.status_err():
 		push_error("Request failed.")
+		return
 
 	load_audio(resp.bytes)
 

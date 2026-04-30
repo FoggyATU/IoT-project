@@ -80,6 +80,7 @@ offset_right = 310.0
 offset_bottom = 493.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 21
+text = "http://10.131.182.185"
 placeholder_text = "Address of  the arduino server"
 
 [node name="StartButton" type="Button" parent="." unique_id=385820314]

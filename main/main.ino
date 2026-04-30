@@ -86,6 +86,8 @@ void setup() {
 
   Serial.println();
   Serial.println(F("Successfully connected to WiFi!"));
+  Serial.println(WiFi.localIP());
+
   delay(1000);  // give some time for the connection to stabilize
 }
 
@@ -200,7 +202,7 @@ void updateScreen(int currentBpm, int previousBpm) {
 
 void loop() {
   heartbeatUpdate();
-  int buttonStatus = digitalRead(button_PIN)
+  int buttonStatus = digitalRead(button_PIN);
   
   if (buttonStatus == HIGH){
     getSong();
@@ -251,6 +253,6 @@ void loop() {
     }
 
     client.stop();
-    delay(5000);
+    delay(1000);
   }
 }
