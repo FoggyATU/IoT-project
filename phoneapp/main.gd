@@ -16,9 +16,9 @@ var currently_playing:String = ""
 #Cool awesome interface
 
 func start():
-	#REFRESH_URL = $ArudinoAddress.text.strip_edges()
-	#get_audio_data()
-	download_audio("KWoTyfPsqbE")
+	REFRESH_URL = $ArudinoAddress.text.strip_edges()
+	get_audio_data()
+	#download_audio("KWoTyfPsqbE")
 	
 func get_audio_data():
 	var resp := await download.async_request(REFRESH_URL)

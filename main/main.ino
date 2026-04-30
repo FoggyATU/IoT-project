@@ -24,6 +24,7 @@ String artist_name = "";
 String videoId = "";
 
 const int pulse_PIN = A0;
+const int button_PIN = 2;
 int bpm = 100;
 int previousPulse = 0;
 int threshold = 550;  // Determine which Signal to "count as a beat" and which to ignore
@@ -199,12 +200,15 @@ void updateScreen(int currentBpm, int previousBpm) {
 
 void loop() {
   heartbeatUpdate();
-
-  getSong();
-  Serial.println("title: " + song_title);
-  Serial.println("artist: " + artist_name);
-  getYoutubeID();
-  Serial.println("id:" + videoId);
+  int buttonStatus = digitalRead(button_PIN)
+  
+  if (buttonStatus == HIGH){
+    getSong();
+    Serial.println("title: " + song_title);
+    Serial.println("artist: " + artist_name);
+    getYoutubeID();
+    Serial.println("id:" + videoId);
+  }
 
   WiFiClient client = server.available();
   if (client) {
@@ -224,12 +228,13 @@ void loop() {
             client.println("HTTP/1.1 200 OK");
             client.println("Content-type:text/plain");
 
+            String theString = song_title + " by " + artist_name + "," + videoId;
             //TODO: GET THE ACCURATE LENGTH SO IT WORKS IN GODOT
-            client.println("Content-length:10");
+            client.println("Content-length:"+String(theString.length()));
             client.println();
 
             // the content of the HTTP response follows the header:
-            client.print(song_title + " by " + artist_name + "," + videoId);
+            client.print(theString);
             //client.print("Espresso by Sabrina Carpenter,51zjlMhdSTE");
             
             client.println();
