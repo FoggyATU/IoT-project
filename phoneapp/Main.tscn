@@ -61,27 +61,25 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -143.77496
-offset_top = 3.0
-offset_right = 143.77496
-offset_bottom = 216.0
+offset_left = -256.38748
+offset_top = 25.0
+offset_right = 256.38745
+offset_bottom = 404.0
 grow_horizontal = 2
 texture = ExtResource("3_r0du0")
 expand_mode = 1
 
 [node name="ArudinoAddress" type="LineEdit" parent="." unique_id=1761450708]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
 offset_left = -310.0
-offset_top = -157.0
+offset_top = 424.0
 offset_right = 310.0
-offset_bottom = -88.0
+offset_bottom = 493.0
 grow_horizontal = 2
-grow_vertical = 0
+theme_override_font_sizes/font_size = 21
 placeholder_text = "Address of  the arduino server"
 
 [node name="StartButton" type="Button" parent="." unique_id=385820314]
@@ -92,9 +90,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -58.5
-offset_top = -72.0
+offset_top = -265.0
 offset_right = 58.5
-offset_bottom = -16.0
+offset_bottom = -209.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "START"

@@ -16,9 +16,10 @@ var currently_playing:String = ""
 #Cool awesome interface
 
 func start():
-	REFRESH_URL = $ArudinoAddress.text.strip_edges()
-	get_audio_data()
-
+	#REFRESH_URL = $ArudinoAddress.text.strip_edges()
+	#get_audio_data()
+	download_audio("KWoTyfPsqbE")
+	
 func get_audio_data():
 	var resp := await download.async_request(REFRESH_URL)
 	if !resp.success() or resp.status_err():
@@ -39,6 +40,7 @@ func get_audio_data():
 	refresh_timer.start()
 
 func download_audio(video_url:String):
+	print("downloading audio")
 	var resp := await download.async_request(DOWNLOAD_URL.format([video_url]))
 	if !resp.success() or resp.status_err():
 		push_error("Request failed.")
