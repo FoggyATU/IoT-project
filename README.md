@@ -10,8 +10,8 @@ Components:
 - Arduino Uno R4
 - Pulse Sensor
 - OLED Display
-- Buzzer
-- 2 Buttons
+- 1 Button
+- 9V Battery
 
 ## Team Members:
 
